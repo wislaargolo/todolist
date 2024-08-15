@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseDTO<ErrorDTO>> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
-        ErrorDTO err = new ErrorDTO(
+        var err = new ErrorDTO(
                 ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",

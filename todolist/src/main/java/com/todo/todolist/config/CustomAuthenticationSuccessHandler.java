@@ -1,5 +1,8 @@
 package com.todo.todolist.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.todo.todolist.dto.ResponseDTO;
+import com.todo.todolist.dto.UserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+
         response.setHeader("User-Id", user.getUser().getId().toString());
         response.setStatus(HttpServletResponse.SC_OK);
     }
