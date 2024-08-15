@@ -3,6 +3,7 @@ package com.todo.todolist.controller;
 import com.todo.todolist.dto.ResponseDTO;
 import com.todo.todolist.dto.TaskDTO;
 import com.todo.todolist.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<TaskDTO>> create(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<ResponseDTO<TaskDTO>> create(@RequestBody @Valid TaskDTO taskDTO) {
         try {
             TaskDTO savedTask = taskService.save(taskDTO);
             ResponseDTO<TaskDTO> response = new ResponseDTO<>(true, "Tarefa criada com sucesso", savedTask, null);
@@ -56,7 +57,7 @@ public class TaskController {
     @PutMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<TaskDTO>> update(
             @PathVariable Long taskId,
-            @RequestBody TaskDTO taskDTO) {
+            @RequestBody @Valid TaskDTO taskDTO) {
         try {
             TaskDTO updatedTask = taskService.update(taskId, taskDTO);
             return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa atualizada com sucesso", updatedTask, null));

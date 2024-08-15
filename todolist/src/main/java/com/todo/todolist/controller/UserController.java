@@ -2,9 +2,10 @@ package com.todo.todolist.controller;
 
 import com.todo.todolist.dto.ResponseDTO;
 import com.todo.todolist.dto.UserDTO;
-import com.todo.todolist.dto.UserRequestDTO;
+import com.todo.todolist.dto.UserRegisterDTO;
 
 import com.todo.todolist.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +30,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<UserDTO>> register(@RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<ResponseDTO<UserDTO>> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
         try {
-            UserDTO responseDTO = userService.save(userRequestDTO);
+            UserDTO responseDTO = userService.save(userRegisterDTO);
 
             return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário registrado com sucesso", responseDTO, null));
         } catch (RuntimeException e) {
@@ -43,9 +44,9 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<ResponseDTO<UserDTO>> updateUser(
             @PathVariable Long userId,
-            @RequestBody UserRequestDTO userRequestDTO) {
+            @RequestBody @Valid UserRegisterDTO userRegisterDTO) {
         try {
-            UserDTO updatedUserDTO = userService.update(userId, userRequestDTO);
+            UserDTO updatedUserDTO = userService.update(userId, userRegisterDTO);
             return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário atualizado com sucesso", updatedUserDTO, null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

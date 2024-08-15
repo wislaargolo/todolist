@@ -1,11 +1,8 @@
 package com.todo.todolist.service;
 
 import com.todo.todolist.dto.UserDTO;
-import com.todo.todolist.dto.UserRequestDTO;
-import com.todo.todolist.mapper.TaskMapper;
+import com.todo.todolist.dto.UserRegisterDTO;
 import com.todo.todolist.mapper.UserMapper;
-import com.todo.todolist.model.Priority;
-import com.todo.todolist.model.Task;
 import com.todo.todolist.model.User;
 import com.todo.todolist.repository.UserRepository;
 import com.todo.todolist.util.PasswordEncoderUtil;
@@ -24,7 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserDTO save(UserRequestDTO userDTO) {
+    public UserDTO save(UserRegisterDTO userDTO) {
         User user = UserMapper.toEntity(userDTO);
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("O login " + user.getUsername() + " já está sendo usado.");
@@ -38,16 +35,16 @@ public class UserService {
                 .map(UserMapper::toDTO);
     }
 
-    public UserDTO update(Long userId, UserRequestDTO userRequestDTO) {
+    public UserDTO update(Long userId, UserRegisterDTO userRegisterDTO) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setUsername(userRequestDTO.username());
-            user.setName(userRequestDTO.name());
+            user.setUsername(userRegisterDTO.username());
+            user.setName(userRegisterDTO.name());
 
-            if (!PasswordEncoderUtil.encode(userRequestDTO.password()).equals(user.getPassword())) {
-                user.setPassword(PasswordEncoderUtil.encode(userRequestDTO.password()));
+            if (!PasswordEncoderUtil.encode(userRegisterDTO.password()).equals(user.getPassword())) {
+                user.setPassword(PasswordEncoderUtil.encode(userRegisterDTO.password()));
             }
 
             User updatedUser = userRepository.save(user);

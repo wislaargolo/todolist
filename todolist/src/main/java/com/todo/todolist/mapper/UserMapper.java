@@ -1,12 +1,12 @@
 package com.todo.todolist.mapper;
 
 import com.todo.todolist.dto.UserDTO;
-import com.todo.todolist.dto.UserRequestDTO;
+import com.todo.todolist.dto.UserRegisterDTO;
 import com.todo.todolist.model.User;
 import com.todo.todolist.util.PasswordEncoderUtil;
 
 public class UserMapper {
-    public static User toEntity(UserRequestDTO dto) {
+    public static User toEntity(UserRegisterDTO dto) {
         User user = new User();
         user.setName(dto.name());
         user.setUsername(dto.username());
