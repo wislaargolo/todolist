@@ -4,6 +4,7 @@ import com.todo.todolist.dto.ResponseDTO;
 import com.todo.todolist.dto.UserDTO;
 import com.todo.todolist.dto.UserRegisterDTO;
 
+import com.todo.todolist.dto.UserUpdateDTO;
 import com.todo.todolist.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,43 +32,27 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<UserDTO>> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
-        try {
-            UserDTO responseDTO = userService.save(userRegisterDTO);
-
-            return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário registrado com sucesso", responseDTO, null));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseDTO<>(false, e.getMessage(), null, null));
-        }
+        UserDTO responseDTO = userService.save(userRegisterDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário registrado com sucesso", responseDTO, null));
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<ResponseDTO<UserDTO>> update(
+    public ResponseEntity<ResponseDTO<UserDTO>> updateUser(
             @PathVariable Long userId,
-            @RequestBody @Valid UserRegisterDTO userRegisterDTO) {
-        try {
-            UserDTO updatedUserDTO = userService.update(userId, userRegisterDTO);
-            return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário atualizado com sucesso", updatedUserDTO, null));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ResponseDTO<>(false, e.getMessage(), null, null));
-        }
+            @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+        UserDTO updatedUserDTO = userService.update(userId, userUpdateDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário atualizado com sucesso", updatedUserDTO, null));
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ResponseDTO<Void>> delete(@PathVariable Long userId) {
-        try {
-            userService.delete(userId);
-            return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário deletado com sucesso", null, null));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ResponseDTO<>(false, e.getMessage(), null, null));
-        }
+    public ResponseEntity<ResponseDTO<Void>> deleteUser(@PathVariable Long userId) {
+        userService.delete(userId);
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário deletado com sucesso", null, null));
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAll() {
+    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAllUsers() {
         List<UserDTO> users = userService.findAll();
         return ResponseEntity.ok(new ResponseDTO<>(true, "Usuários recuperados com sucesso", users, null));
     }
-
 }

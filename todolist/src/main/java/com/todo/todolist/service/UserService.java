@@ -2,6 +2,7 @@ package com.todo.todolist.service;
 
 import com.todo.todolist.dto.UserDTO;
 import com.todo.todolist.dto.UserRegisterDTO;
+import com.todo.todolist.dto.UserUpdateDTO;
 import com.todo.todolist.mapper.UserMapper;
 import com.todo.todolist.model.User;
 import com.todo.todolist.repository.UserRepository;
@@ -24,7 +25,7 @@ public class UserService {
     public UserDTO save(UserRegisterDTO userDTO) {
         User user = UserMapper.toEntity(userDTO);
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("O login " + user.getUsername() + " já está sendo usado.");
+            throw new IllegalArgumentException("O login " + user.getUsername() + " já está sendo usado.");
         }
 
         return UserMapper.toDTO(userRepository.save(user));
@@ -35,16 +36,22 @@ public class UserService {
                 .map(UserMapper::toDTO);
     }
 
-    public UserDTO update(Long userId, UserRegisterDTO userRegisterDTO) {
+    public UserDTO update(Long userId, UserUpdateDTO userUpdateDTO) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setUsername(userRegisterDTO.username());
-            user.setName(userRegisterDTO.name());
 
-            if (!PasswordEncoderUtil.encode(userRegisterDTO.password()).equals(user.getPassword())) {
-                user.setPassword(PasswordEncoderUtil.encode(userRegisterDTO.password()));
+            Optional<User> existingUser = userRepository.findByUsername(userUpdateDTO.username());
+            if (existingUser.isPresent() && !existingUser.get().getId().equals(userId)) {
+                throw new IllegalArgumentException("O username " + userUpdateDTO.username() + " já está em uso por outro usuário.");
+            }
+
+            user.setUsername(userUpdateDTO.username());
+            user.setName(userUpdateDTO.name());
+
+            if (!PasswordEncoderUtil.encode(userUpdateDTO.password()).equals(user.getPassword())) {
+                user.setPassword(PasswordEncoderUtil.encode(userUpdateDTO.password()));
             }
 
             User updatedUser = userRepository.save(user);

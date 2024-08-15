@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
@@ -30,14 +31,9 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<TaskDTO>> create(@RequestBody @Valid TaskDTO taskDTO) {
-        try {
-            TaskDTO savedTask = taskService.save(taskDTO);
-            ResponseDTO<TaskDTO> response = new ResponseDTO<>(true, "Tarefa criada com sucesso", savedTask, null);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            ResponseDTO<TaskDTO> response = new ResponseDTO<>(false, "Falha na criação da Tarefa", null, null);
-            return ResponseEntity.badRequest().body(response);
-        }
+        TaskDTO savedTask = taskService.save(taskDTO);
+        ResponseDTO<TaskDTO> response = new ResponseDTO<>(true, "Tarefa criada com sucesso", savedTask, null);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/{userId}")
@@ -48,35 +44,21 @@ public class TaskController {
 
     @GetMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<TaskDTO>> getById(@PathVariable Long taskId) {
-        try {
-            TaskDTO taskDTO = taskService.getById(taskId);
-            return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa encontrada com sucesso", taskDTO, null));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseDTO<>(false, e.getMessage(), null, null));
-        }
+        TaskDTO taskDTO = taskService.getById(taskId);
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa encontrada com sucesso", taskDTO, null));
     }
 
     @DeleteMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<Void>> delete(@PathVariable Long taskId) {
-        try {
-            taskService.delete(taskId);
-            return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa deletada com sucesso", null, null));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ResponseDTO<>(false, e.getMessage(), null, null));
-        }
+        taskService.delete(taskId);
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa deletada com sucesso", null, null));
     }
 
     @PutMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<TaskDTO>> update(
             @PathVariable Long taskId,
             @RequestBody @Valid TaskDTO taskDTO) {
-        try {
-            TaskDTO updatedTask = taskService.update(taskId, taskDTO);
-            return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa atualizada com sucesso", updatedTask, null));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ResponseDTO<>(false, e.getMessage(), null, null));
-        }
+        TaskDTO updatedTask = taskService.update(taskId, taskDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa atualizada com sucesso", updatedTask, null));
     }
-
 }
