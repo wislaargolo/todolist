@@ -3,7 +3,9 @@ package com.todo.todolist.controller;
 import com.todo.todolist.dto.ResponseDTO;
 import com.todo.todolist.dto.TaskDTO;
 import com.todo.todolist.service.TaskService;
+import com.todo.todolist.util.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,9 +41,20 @@ public class TaskController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ResponseDTO<List<TaskDTO>>> getTasksByUser(@PathVariable Long userId) {
-        List<TaskDTO> tasks = taskService.findTasksByUserId(userId);
+    public ResponseEntity<ResponseDTO<List<TaskDTO>>> getByUser(@PathVariable Long userId) {
+        List<TaskDTO> tasks = taskService.findByUserId(userId);
         return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefas encontradas", tasks, null));
+    }
+
+    @GetMapping("/{taskId}")
+    public ResponseEntity<ResponseDTO<TaskDTO>> getById(@PathVariable Long taskId) {
+        try {
+            TaskDTO taskDTO = taskService.getById(taskId);
+            return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa encontrada com sucesso", taskDTO, null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseDTO<>(false, e.getMessage(), null, null));
+        }
     }
 
     @DeleteMapping("/{taskId}")

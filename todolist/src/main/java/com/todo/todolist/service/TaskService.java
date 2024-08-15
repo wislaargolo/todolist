@@ -8,6 +8,7 @@ import com.todo.todolist.model.Task;
 import com.todo.todolist.model.User;
 import com.todo.todolist.repository.TaskRepository;
 import com.todo.todolist.repository.UserRepository;
+import com.todo.todolist.util.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,11 +36,20 @@ public class TaskService {
         return TaskMapper.toDTO(savedTask);
     }
 
-    public List<TaskDTO> findTasksByUserId(Long userId) {
+    public List<TaskDTO> findByUserId(Long userId) {
         List<Task> tasks = taskRepository.findByUserId(userId);
         return tasks.stream()
                 .map(TaskMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public TaskDTO getById(Long taskId) {
+        Optional<Task> task = taskRepository.findById(taskId);
+        if(task.isPresent()) {
+            return TaskMapper.toDTO(task.get());
+        } else {
+            throw new ResourceNotFoundException("Tarefa não encontrada para o ID: " + taskId);
+        }
     }
 
     public void delete(Long taskId) {

@@ -62,7 +62,7 @@ public class UserService {
         }
     }
 
-    public List<UserDTO> findAllUsers() {
+    public List<UserDTO> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(UserMapper::toDTO)

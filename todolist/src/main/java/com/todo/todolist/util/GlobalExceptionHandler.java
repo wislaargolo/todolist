@@ -1,6 +1,7 @@
 package com.todo.todolist.util;
 
 import com.todo.todolist.dto.ResponseDTO;
+import com.todo.todolist.util.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,4 +27,5 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(new ResponseDTO<>(false, errorMessage.toString(), null, null), HttpStatus.BAD_REQUEST);
     }
+
 }
