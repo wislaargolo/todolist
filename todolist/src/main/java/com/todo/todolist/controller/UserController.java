@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<UserDTO>> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
         UserDTO responseDTO = userService.save(userRegisterDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário registrado com sucesso", responseDTO, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "Usuário registrado com sucesso", responseDTO, null));
     }
 
     @PutMapping("/{userId}")

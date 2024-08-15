@@ -32,8 +32,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<ResponseDTO<TaskDTO>> create(@RequestBody @Valid TaskDTO taskDTO) {
         TaskDTO savedTask = taskService.save(taskDTO);
-        ResponseDTO<TaskDTO> response = new ResponseDTO<>(true, "Tarefa criada com sucesso", savedTask, null);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "Tarefa criada com sucesso", savedTask, null));
     }
 
     @GetMapping("/user/{userId}")
