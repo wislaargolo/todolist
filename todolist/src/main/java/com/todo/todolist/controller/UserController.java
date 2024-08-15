@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<ResponseDTO<UserDTO>> updateUser(
+    public ResponseEntity<ResponseDTO<UserDTO>> update(
             @PathVariable Long userId,
             @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
         UserDTO updatedUserDTO = userService.update(userId, userUpdateDTO);
@@ -45,13 +45,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ResponseDTO<Void>> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<ResponseDTO<Void>> delete(@PathVariable Long userId) {
         userService.delete(userId);
         return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário deletado com sucesso", null, null));
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAllUsers() {
+    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAll() {
         List<UserDTO> users = userService.findAll();
         return ResponseEntity.ok(new ResponseDTO<>(true, "Usuários recuperados com sucesso", users, null));
     }
