@@ -25,16 +25,9 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         } else {
             errorMessage = exception.getMessage();
         }
-
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(
-                false,
-                "Login falhou",
-                null,
-                errorMessage
-        );
-
+        
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(new ObjectMapper().writeValueAsString(responseDTO));
+        response.getWriter().write("{\"success\": false, \"error\": \"" + errorMessage + "\"}");
     }
 }
