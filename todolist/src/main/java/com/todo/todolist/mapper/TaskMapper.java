@@ -13,19 +13,11 @@ public class TaskMapper {
         task.setCompleted(dto.completed());
         task.setPriority(Priority.valueOf(dto.priority()));
         task.setUser(user);
-        return task;
-    }
-
-    public static Task toEntity(TaskDTO dto) {
-        Task task = new Task();
-        task.setId(dto.id());
-        task.setTitle(dto.title());
-        task.setCompleted(dto.completed());
-        task.setPriority(Priority.valueOf(dto.priority()));
+        task.setDueDate(dto.dueDate());
         return task;
     }
 
     public static TaskDTO toDTO(Task task) {
-        return new TaskDTO(task.getId(), task.getTitle(), task.isCompleted(), task.getPriority().toString(), task.getUser().getId());
+        return new TaskDTO(task.getId(), task.getTitle(), task.isCompleted(), task.getPriority().toString(), task.getUser().getId(), task.getDueDate());
     }
 }

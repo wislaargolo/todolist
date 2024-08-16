@@ -46,6 +46,8 @@ export function SignIn() {
 
                 if (userId) {
                     localStorage.setItem('userId', userId); 
+                    localStorage.setItem('isAuthenticated', 'true');
+                    console.log("entou");
                 }
 
                 Swal.fire({

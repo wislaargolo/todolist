@@ -20,6 +20,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
         response.setHeader("User-Id", user.getUser().getId().toString());
+        response.setHeader("Access-Control-Expose-Headers", "User-Id");
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

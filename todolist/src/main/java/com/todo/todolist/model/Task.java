@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,6 +35,17 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private User user;
+
+    @Column(nullable = false)
+    private LocalDate dueDate;
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
 
     public Long getId() {
         return id;

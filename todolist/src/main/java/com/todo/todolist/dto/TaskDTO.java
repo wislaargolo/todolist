@@ -4,6 +4,8 @@ import com.todo.todolist.model.Priority;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+
 public record TaskDTO (
 
         Long id,
@@ -17,7 +19,10 @@ public record TaskDTO (
         String priority,
 
         @NotNull(message = "Usuário ID é obrigatório")
-        Long userId
+        Long userId,
+
+        @NotNull(message = "Data de vencimento é obrigatória")
+        LocalDate dueDate
 
 ) {
 }
