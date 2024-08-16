@@ -44,6 +44,12 @@ public class SecurityConfig {
                         .successHandler(new CustomAuthenticationSuccessHandler())
                         .failureHandler(new CustomAuthenticationFailureHandler())
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/api/users/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
