@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<UserDTO>> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
         UserDTO responseDTO = userService.save(userRegisterDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "Usuário registrado com sucesso", responseDTO, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "User registered successfully", responseDTO, null));
     }
 
     @PutMapping("/{userId}")
@@ -41,18 +41,18 @@ public class UserController {
             @PathVariable Long userId,
             @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
         UserDTO updatedUserDTO = userService.update(userId, userUpdateDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário atualizado com sucesso", updatedUserDTO, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "User updated successfully", updatedUserDTO, null));
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<ResponseDTO<Void>> delete(@PathVariable Long userId) {
         userService.delete(userId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuário deletado com sucesso", null, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "User deleted successfully", null, null));
     }
 
     @GetMapping
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getAll() {
         List<UserDTO> users = userService.findAll();
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Usuários recuperados com sucesso", users, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Users retrieved successfully", users, null));
     }
 }

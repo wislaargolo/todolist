@@ -3,7 +3,6 @@ package com.todo.todolist.controller;
 import com.todo.todolist.dto.ResponseDTO;
 import com.todo.todolist.dto.TaskDTO;
 import com.todo.todolist.service.TaskService;
-import com.todo.todolist.util.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,25 +31,25 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<ResponseDTO<TaskDTO>> create(@RequestBody @Valid TaskDTO taskDTO) {
         TaskDTO savedTask = taskService.save(taskDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "Tarefa criada com sucesso", savedTask, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "Task created successfully", savedTask, null));
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<ResponseDTO<List<TaskDTO>>> getByUser(@PathVariable Long userId) {
         List<TaskDTO> tasks = taskService.findByUserId(userId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefas encontradas", tasks, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Tasks found", tasks, null));
     }
 
     @GetMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<TaskDTO>> getById(@PathVariable Long taskId) {
         TaskDTO taskDTO = taskService.getById(taskId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa encontrada com sucesso", taskDTO, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Task found successfully", taskDTO, null));
     }
 
     @DeleteMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<Void>> delete(@PathVariable Long taskId) {
         taskService.delete(taskId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa deletada com sucesso", null, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Task deleted successfully", null, null));
     }
 
     @PutMapping("/{taskId}")
@@ -58,6 +57,6 @@ public class TaskController {
             @PathVariable Long taskId,
             @RequestBody @Valid TaskDTO taskDTO) {
         TaskDTO updatedTask = taskService.update(taskId, taskDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Tarefa atualizada com sucesso", updatedTask, null));
+        return ResponseEntity.ok(new ResponseDTO<>(true, "Task updated successfully", updatedTask, null));
     }
 }

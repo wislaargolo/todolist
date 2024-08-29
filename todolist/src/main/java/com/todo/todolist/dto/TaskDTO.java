@@ -9,19 +9,19 @@ import java.time.LocalDate;
 public record TaskDTO (
 
         Long id,
-        @NotBlank(message = "Título é obrigatório")
+        @NotBlank(message = "Title is required")
         String title,
 
-        @NotNull(message = "Status é obrigatório")
+        @NotNull(message = "Status is required")
         boolean completed,
 
-        @NotNull(message = "Prioridade é obrigatórioy")
+        @NotNull(message = "Priority is required")
         String priority,
 
-        @NotNull(message = "Usuário ID é obrigatório")
+        @NotNull(message = "User ID is required")
         Long userId,
 
-        @NotNull(message = "Data de vencimento é obrigatória")
+        @NotNull(message = "Due date is required")
         LocalDate dueDate
 
 ) {

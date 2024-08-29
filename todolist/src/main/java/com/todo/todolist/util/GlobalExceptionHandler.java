@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDTO<ErrorDTO>> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        StringBuilder errorMessage = new StringBuilder("Erro de validação: ");
+        StringBuilder errorMessage = new StringBuilder("Validation Error: ");
 
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -35,7 +33,7 @@ public class GlobalExceptionHandler {
                 errorMessage.toString(),
                 request.getRequestURI());
 
-        return new ResponseEntity<>(new ResponseDTO<>(false, "Erro de validação", null, err), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDTO<>(false, "Validation Error", null, err), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

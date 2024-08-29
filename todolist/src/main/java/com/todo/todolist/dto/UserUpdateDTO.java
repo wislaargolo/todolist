@@ -3,10 +3,10 @@ package com.todo.todolist.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public record UserUpdateDTO(
-        @NotBlank(message = "Nome é obrigatório")
+        @NotBlank(message = "Name is required")
         String name,
 
-        @NotBlank(message = "Login é obrigatório")
+        @NotBlank(message = "Username is required")
         String username,
 
         String password
