@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,20 +24,25 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "Title is required")
     @Column(nullable = false)
     private String title;
 
+    @NotNull(message = "Status is required")
     @Column(nullable = false)
     private boolean completed;
 
+    @NotNull(message = "Priority is required")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    @NotNull(message = "User is required")
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private User user;
 
+    @NotNull(message = "Due date is required")
     @Column(nullable = false)
     private LocalDate dueDate;
 

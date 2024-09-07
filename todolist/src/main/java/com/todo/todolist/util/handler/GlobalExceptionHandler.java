@@ -5,6 +5,7 @@ import com.todo.todolist.util.exception.BusinessException;
 import com.todo.todolist.util.exception.ErrorDTO;
 import com.todo.todolist.util.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -37,13 +38,13 @@ public class GlobalExceptionHandler {
                 err));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDTO<ErrorDTO>> handleValidationExceptions(MethodArgumentNotValidException exception, HttpServletRequest request) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResponseDTO<ErrorDTO>> handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request) {
         StringBuilder errorMessage = new StringBuilder("Validation Error: ");
 
-        exception.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
+        exception.getConstraintViolations().forEach(violation -> {
+            String fieldName = violation.getPropertyPath().toString();
+            String message = violation.getMessage();
             errorMessage.append(fieldName).append(": ").append(message).append("; ");
         });
 
@@ -54,8 +55,9 @@ public class GlobalExceptionHandler {
                 errorMessage.toString(),
                 request.getRequestURI());
 
-        return new ResponseEntity<>(new ResponseDTO<>(false, MSG_ERRO + exception.getMessage(), null, err), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDTO<>(false, "Validation Error: " + exception.getMessage(), null, err), HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ResponseDTO<ErrorDTO>> handleResourceNotFoundException(ResourceNotFoundException exception, HttpServletRequest request) {

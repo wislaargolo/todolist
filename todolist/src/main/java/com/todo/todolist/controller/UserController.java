@@ -1,7 +1,7 @@
 package com.todo.todolist.controller;
 
 import com.todo.todolist.dto.ResponseDTO;
-import com.todo.todolist.dto.UserDTO;
+import com.todo.todolist.dto.UserResponseDTO;
 import com.todo.todolist.dto.UserRegisterDTO;
 
 import com.todo.todolist.dto.UserUpdateDTO;
@@ -31,16 +31,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO<UserDTO>> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
-        UserDTO responseDTO = userService.save(userRegisterDTO);
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
+        UserResponseDTO responseDTO = userService.save(userRegisterDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>(true, "User registered successfully", responseDTO, null));
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<ResponseDTO<UserDTO>> update(
+    public ResponseEntity<ResponseDTO<UserResponseDTO>> update(
                 @PathVariable Long userId,
                 @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
-        UserDTO updatedUserDTO = userService.update(userUpdateDTO, userId);
+        UserResponseDTO updatedUserDTO = userService.update(userUpdateDTO, userId);
         return ResponseEntity.ok(new ResponseDTO<>(true, "User updated successfully", updatedUserDTO, null));
     }
 
@@ -51,8 +51,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAll() {
-        List<UserDTO> users = userService.findAll();
+    public ResponseEntity<ResponseDTO<List<UserResponseDTO>>> getAll() {
+        List<UserResponseDTO> users = userService.findAll();
         return ResponseEntity.ok(new ResponseDTO<>(true, "Users retrieved successfully", users, null));
     }
 }
