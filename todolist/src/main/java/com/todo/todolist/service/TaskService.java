@@ -28,7 +28,7 @@ public class TaskService {
 
     public TaskDTO save(TaskDTO taskDTO) {
         User user = userRepository.findById(taskDTO.userId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + taskDTO.userId() + " not found"));
 
         Task task = TaskMapper.toEntity(taskDTO, user);
         Task savedTask = taskRepository.save(task);
@@ -48,7 +48,7 @@ public class TaskService {
         if(task.isPresent()) {
             return TaskMapper.toDTO(task.get());
         } else {
-            throw new ResourceNotFoundException("Tarefa não encontrada para o ID: " + taskId);
+            throw new ResourceNotFoundException("Task with ID " + taskId + " not found");
         }
     }
 
@@ -56,7 +56,7 @@ public class TaskService {
         if (taskRepository.existsById(taskId)) {
             taskRepository.deleteById(taskId);
         } else {
-            throw new IllegalArgumentException("Tarefa com ID " + taskId + " não existe");
+            throw new ResourceNotFoundException("Task with ID " + taskId + " not found");
         }
     }
 
@@ -67,19 +67,15 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public TaskDTO update(Long taskId, TaskDTO taskDTO) {
-        Optional<Task> optionalTask = taskRepository.findById(taskId);
+    public TaskDTO update(TaskDTO taskDTO, Long taskId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException(
+                "Task with ID " + taskId + " not found"
+        ));
 
-        if (optionalTask.isPresent()) {
-            Task task = optionalTask.get();
-            task.setTitle(taskDTO.title());
-            task.setCompleted(taskDTO.completed());
-            task.setPriority(Priority.valueOf(taskDTO.priority()));
+        task = TaskMapper.toEntity(taskDTO, task.getUser());
+        task.setId(taskId);
 
-            Task updatedTask = taskRepository.save(task);
-            return TaskMapper.toDTO(updatedTask);
-        } else {
-            throw new IllegalArgumentException("Tarefa com ID " + taskId + " não existe");
-        }
+        return TaskMapper.toDTO(taskRepository.save(task));
+
     }
 }

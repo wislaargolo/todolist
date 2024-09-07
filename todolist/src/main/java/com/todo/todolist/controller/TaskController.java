@@ -53,10 +53,9 @@ public class TaskController {
     }
 
     @PutMapping("/{taskId}")
-    public ResponseEntity<ResponseDTO<TaskDTO>> update(
-            @PathVariable Long taskId,
-            @RequestBody @Valid TaskDTO taskDTO) {
-        TaskDTO updatedTask = taskService.update(taskId, taskDTO);
+    public ResponseEntity<ResponseDTO<TaskDTO>> update (
+                    @PathVariable Long taskId, @RequestBody @Valid TaskDTO taskDTO) {
+        TaskDTO updatedTask = taskService.update(taskDTO, taskId);
         return ResponseEntity.ok(new ResponseDTO<>(true, "Task updated successfully", updatedTask, null));
     }
 }

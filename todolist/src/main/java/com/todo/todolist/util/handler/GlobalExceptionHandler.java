@@ -1,6 +1,7 @@
-package com.todo.todolist.util;
+package com.todo.todolist.util.handler;
 
 import com.todo.todolist.dto.ResponseDTO;
+import com.todo.todolist.util.exception.BusinessException;
 import com.todo.todolist.util.exception.ErrorDTO;
 import com.todo.todolist.util.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,11 +17,31 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String MSG_ERRO = "Error: ";
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ResponseDTO<ErrorDTO>> businessException(BusinessException exception,
+                                                                      HttpServletRequest request) {
+
+        ErrorDTO err = new ErrorDTO(
+                ZonedDateTime.now(),
+                exception.getHttpStatusCode().value(),
+                "Business error",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO<ErrorDTO>(
+                false,
+                MSG_ERRO + exception.getMessage(),
+                null,
+                err));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDTO<ErrorDTO>> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ResponseDTO<ErrorDTO>> handleValidationExceptions(MethodArgumentNotValidException exception, HttpServletRequest request) {
         StringBuilder errorMessage = new StringBuilder("Validation Error: ");
 
-        ex.getBindingResult().getAllErrors().forEach(error -> {
+        exception.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errorMessage.append(fieldName).append(": ").append(message).append("; ");
@@ -33,48 +54,48 @@ public class GlobalExceptionHandler {
                 errorMessage.toString(),
                 request.getRequestURI());
 
-        return new ResponseEntity<>(new ResponseDTO<>(false, "Validation Error", null, err), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDTO<>(false, MSG_ERRO + exception.getMessage(), null, err), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ResponseDTO<ErrorDTO>> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ResponseDTO<ErrorDTO>> handleResourceNotFoundException(ResourceNotFoundException exception, HttpServletRequest request) {
         ErrorDTO err = new ErrorDTO(
                 ZonedDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
                 "Resource Not Found",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ResponseDTO<>(false, "Resource Not Found", null, err));
+                .body(new ResponseDTO<>(false, MSG_ERRO + exception.getMessage(), null, err));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ResponseDTO<ErrorDTO>> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+    public ResponseEntity<ResponseDTO<ErrorDTO>> handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request) {
         var err = new ErrorDTO(
                 ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
-                ex.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseDTO<>(false, "Bad Request", null, err));
+                .body(new ResponseDTO<>(false, MSG_ERRO + exception.getMessage(), null, err));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseDTO<ErrorDTO>> internalErrorException(Exception e, HttpServletRequest request) {
+    public ResponseEntity<ResponseDTO<ErrorDTO>> internalErrorException(Exception exception, HttpServletRequest request) {
 
         ErrorDTO err = new ErrorDTO(
                 ZonedDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "An unexpected problem occurred.",
-                e.getMessage(),
+                exception.getMessage(),
                 request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO<>(
                 false,
-                "Error: " + e.getMessage(),
+                MSG_ERRO + exception.getMessage(),
                 null,
                 err));
     }

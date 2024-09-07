@@ -9,6 +9,7 @@ public class TaskMapper {
 
     public static Task toEntity(TaskDTO dto, User user) {
         Task task = new Task();
+        task.setId(dto.id());
         task.setTitle(dto.title());
         task.setCompleted(dto.completed());
         task.setPriority(Priority.valueOf(dto.priority()));
