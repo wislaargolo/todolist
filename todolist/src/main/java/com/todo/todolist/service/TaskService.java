@@ -1,7 +1,7 @@
 package com.todo.todolist.service;
 
 
-import com.todo.todolist.dto.TaskDTO;
+import com.todo.todolist.dto.task.TaskDTO;
 import com.todo.todolist.mapper.TaskMapper;
 import com.todo.todolist.model.Task;
 import com.todo.todolist.model.User;
@@ -9,7 +9,6 @@ import com.todo.todolist.repository.TaskRepository;
 import com.todo.todolist.repository.UserRepository;
 import com.todo.todolist.util.AttributeUtils;
 import com.todo.todolist.util.exception.ResourceNotFoundException;
-import com.todo.todolist.util.validators.EntityFieldsValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +27,6 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public void validateBeforeSave(Task task) {
-        EntityFieldsValidator.validate(task);
-    }
-
 
 
     public TaskDTO save(TaskDTO taskDTO) {
@@ -39,7 +34,6 @@ public class TaskService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + taskDTO.userId() + " not found"));
         Task task = TaskMapper.toEntity(taskDTO, user);
 
-        validateBeforeSave(task);
         Task savedTask = taskRepository.save(task);
 
         return TaskMapper.toDTO(savedTask);

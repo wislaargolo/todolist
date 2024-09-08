@@ -1,7 +1,7 @@
 package com.todo.todolist.controller;
 
-import com.todo.todolist.dto.AuthRequestDTO;
-import com.todo.todolist.dto.AuthResponseDTO;
+import com.todo.todolist.dto.auth.AuthRequestDTO;
+import com.todo.todolist.dto.auth.AuthResponseDTO;
 import com.todo.todolist.dto.ResponseDTO;
 import com.todo.todolist.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.todo.todolist.controller;
 
 import com.todo.todolist.dto.ResponseDTO;
-import com.todo.todolist.dto.TaskDTO;
+import com.todo.todolist.dto.task.TaskDTO;
 import com.todo.todolist.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -54,7 +54,8 @@ public class TaskController {
 
     @PutMapping("/{taskId}")
     public ResponseEntity<ResponseDTO<TaskDTO>> update (
-                    @PathVariable Long taskId, @RequestBody @Valid TaskDTO taskDTO) {
+                    @PathVariable Long taskId,
+                    @RequestBody @Valid TaskDTO taskDTO) {
         TaskDTO updatedTask = taskService.update(taskDTO, taskId);
         return ResponseEntity.ok(new ResponseDTO<>(true, "Task updated successfully", updatedTask, null));
     }

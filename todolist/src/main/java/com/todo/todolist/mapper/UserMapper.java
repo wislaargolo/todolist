@@ -1,8 +1,7 @@
 package com.todo.todolist.mapper;
 
-import com.todo.todolist.dto.UserResponseDTO;
-import com.todo.todolist.dto.UserRegisterDTO;
-import com.todo.todolist.dto.UserUpdateDTO;
+import com.todo.todolist.dto.user.UserDTO;
+import com.todo.todolist.dto.user.UserRegisterDTO;
 import com.todo.todolist.model.User;
 
 public class UserMapper {
@@ -15,15 +14,7 @@ public class UserMapper {
         return user;
     }
 
-    public static User toEntity(UserUpdateDTO dto) {
-        User user = new User();
-        user.setName(dto.name());
-        user.setUsername(dto.username());
-        user.setEmail(dto.email());
-        return user;
-    }
-
-    public static UserResponseDTO toDTO(User user) {
-        return new UserResponseDTO(user.getId(), user.getName(), user.getUsername(), user.getEmail());
+    public static UserDTO toDTO(User user) {
+        return new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getEmail());
     }
 }

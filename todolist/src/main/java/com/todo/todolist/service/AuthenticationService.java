@@ -1,13 +1,12 @@
 package com.todo.todolist.service;
 
 
-import com.todo.todolist.dto.AuthRequestDTO;
-import com.todo.todolist.dto.AuthResponseDTO;
+import com.todo.todolist.dto.auth.AuthRequestDTO;
+import com.todo.todolist.dto.auth.AuthResponseDTO;
 import com.todo.todolist.model.User;
 import com.todo.todolist.repository.UserRepository;
 import com.todo.todolist.util.exception.ResourceNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 

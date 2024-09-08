@@ -38,16 +38,15 @@ public class GlobalExceptionHandler {
                 err));
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ResponseDTO<ErrorDTO>> handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ResponseDTO<ErrorDTO>> handleValidationExceptions(MethodArgumentNotValidException exception, HttpServletRequest request) {
         StringBuilder errorMessage = new StringBuilder("Validation Error: ");
 
-        exception.getConstraintViolations().forEach(violation -> {
-            String fieldName = violation.getPropertyPath().toString();
-            String message = violation.getMessage();
+        exception.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
             errorMessage.append(fieldName).append(": ").append(message).append("; ");
         });
-
         ErrorDTO err = new ErrorDTO(
                 ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -55,7 +54,7 @@ public class GlobalExceptionHandler {
                 errorMessage.toString(),
                 request.getRequestURI());
 
-        return new ResponseEntity<>(new ResponseDTO<>(false, "Validation Error: " + exception.getMessage(), null, err), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ResponseDTO<>(false, MSG_ERRO + exception.getMessage(), null, err), HttpStatus.BAD_REQUEST);
     }
 
 
